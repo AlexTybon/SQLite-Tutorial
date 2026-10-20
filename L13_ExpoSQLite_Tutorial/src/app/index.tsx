@@ -37,6 +37,7 @@ export default function App() {
   const [name, setName] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   /**
    * Database State
@@ -81,6 +82,10 @@ export default function App() {
       console.log("Failed to fetch items", err);
     }
   };
+
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase()),
+  );
 
   /**
    * Save or Update Item Function
@@ -217,9 +222,17 @@ export default function App() {
         title={editingId === null ? "Save Item" : "Update Item"}
         onPress={saveOrUpdate}
       />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Search for an item"
+        value={searchText}
+        onChangeText={setSearchText}
+      />
+
       <FlatList
         style={styles.list}
-        data={items}
+        data={filteredItems}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => (
           <View
