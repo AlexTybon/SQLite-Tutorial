@@ -38,6 +38,7 @@ export default function App() {
   const [quantity, setQuantity] = useState<string>("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [searchText, setSearchText] = useState<string>("");
+  const [color, setColor] = useState<string>("");
 
   /**
    * Database State
@@ -115,13 +116,14 @@ export default function App() {
 
     try {
       if (editingId === null) {
-        await insertItem(db, name.trim(), parsedQuantity);
+        await insertItem(db, name.trim(), parsedQuantity, color);
       } else {
-        await updateItem(db, editingId, name.trim(), parsedQuantity);
+        await updateItem(db, editingId, name.trim(), parsedQuantity, color);
       }
       await loadItems();
       setName("");
       setQuantity("");
+      setColor("");
       setEditingId(null);
     } catch (err) {
       console.log("Failed to save/update item", err);
@@ -214,6 +216,13 @@ export default function App() {
         keyboardType="numeric"
       />
 
+      <TextInput
+        style={styles.input}
+        placeholder="Label Color"
+        value={color}
+        onChangeText={setColor}
+      />
+
       {/* 
         Save Button
         Triggers the saveOrUpdate function which validates and saves to database.
@@ -248,6 +257,7 @@ export default function App() {
           <ItemRow
             name={item.name}
             quantity={item.quantity}
+            color={item.color}
             onEdit={() => startEdit(item)}
             onDelete={() => confirmDelete(item.id)}
           />

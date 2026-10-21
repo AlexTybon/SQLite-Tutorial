@@ -5,15 +5,23 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type Props = {
   name: string;
   quantity: number;
+  color: string;
   onEdit: () => void;
   onDelete: () => void;
 };
 
-const ItemRow: React.FC<Props> = ({ name, quantity, onEdit, onDelete }) => {
+const ItemRow: React.FC<Props> = ({
+  name,
+  quantity,
+  color,
+  onEdit,
+  onDelete,
+}) => {
   return (
     <View style={styles.container}>
       {/* Left side: Item info */}
       <View style={styles.info}>
+        <MaterialIcon name="label" size={24} color={color} />
         <Text style={styles.name} numberOfLines={1}>
           {name}
         </Text>

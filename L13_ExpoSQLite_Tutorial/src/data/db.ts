@@ -18,6 +18,7 @@ export interface Item {
   id: number;
   name: string;
   quantity: number;
+  color: string;
 }
 
 /**
@@ -38,7 +39,7 @@ export interface Item {
  */
 export const initDb = async (db: SQLiteDatabase): Promise<void> => {
   await db.execAsync(
-    "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, quantity INTEGER NOT NULL);",
+    "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, quantity INTEGER NOT NULL, color TEXT NOT NULL DEFAULT '#FFFFFF');",
   );
 };
 
@@ -63,11 +64,12 @@ export const insertItem = async (
   db: SQLiteDatabase,
   name: string,
   quantity: number,
+  color: string,
 ): Promise<void> => {
-  await db.runAsync("INSERT INTO items (name, quantity) VALUES (?, ?);", [
-    name,
-    quantity,
-  ]);
+  await db.runAsync(
+    "INSERT INTO items (name, quantity, color) VALUES (?, ?, ?);",
+    [name, quantity, color],
+  );
 };
 
 /**
@@ -108,12 +110,12 @@ export const updateItem = async (
   id: number,
   name: string,
   quantity: number,
+  color: string,
 ): Promise<void> => {
-  await db.runAsync("UPDATE items SET name = ?, quantity = ? WHERE id = ?;", [
-    name,
-    quantity,
-    id,
-  ]);
+  await db.runAsync(
+    "UPDATE items SET name = ?, quantity = ?, color = ? WHERE id = ?;",
+    [name, quantity, color, id],
+  );
 };
 
 /**
